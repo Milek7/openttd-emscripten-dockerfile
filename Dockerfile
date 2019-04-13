@@ -2,7 +2,7 @@ FROM trzeci/emscripten-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y &&\
-	apt-get install -y build-essential git autopoint automake libtool pkg-config wget unzip xz-utils
+	apt-get install -y build-essential git autopoint automake libtool pkg-config wget unzip xz-utils libsdl1.2-dev
 
 WORKDIR /
 RUN mkdir extralibs
@@ -24,13 +24,9 @@ RUN git clone https://git.code.sf.net/p/libtimidity/libtimidity &&\
 	emmake make install
 
 WORKDIR /
-COPY sdl2.pc /extralibs/lib/pkgconfig/
-RUN touch empty.c &&\
-	emcc -s USE_SDL=2 empty.c -o /dev/null &&\
-	cp -r /emsdk_portable/data/.cache/asmjs/ports-builds/sdl2/include/* /extralibs/include/
-
 COPY zlib.pc /extralibs/lib/pkgconfig/
-RUN emcc -s USE_ZLIB=1 empty.c -o /dev/null &&\
+RUN touch empty.c &&\
+	emcc -s USE_ZLIB=1 empty.c -o /dev/null &&\
 	rm empty.c &&\
 	cp -r /emsdk_portable/data/.cache/asmjs/ports-builds/zlib/z*.h /extralibs/include/
 
@@ -72,5 +68,5 @@ CMD ./configure --without-zlib --without-lzo2 --without-sse --without-lzma --wit
 	cp -r /freepats /workdir/content/ &&\
 	cp -r /baseset /workdir/content/ &&\
 	cp /files/openttd.cfg /workdir/content/ &&\
-	emcc /workdir/openttd.bc -o /workdir/output/index.html -O2 -s "BINARYEN_TRAP_MODE='clamp'" -s USE_SDL=2 -s USE_ZLIB=1 -s STB_IMAGE=1 -s ALLOW_MEMORY_GROWTH=1 \
+	emcc /workdir/openttd.bc -o /workdir/output/index.html -O2 -s "BINARYEN_TRAP_MODE='clamp'" -s USE_SDL=1 -s USE_ZLIB=1 -s STB_IMAGE=1 -s ALLOW_MEMORY_GROWTH=1 \
 		--preload-file /workdir/content@/ --pre-js /files/pre.js --shell-file /files/shell.html

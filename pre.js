@@ -1,5 +1,6 @@
 Module['arguments'] = ['-d', '1'];
 Module['websocket'] = { url: 'wss://' };
+Module['SDL'] = { opaqueFrontBuffer: false, copyOnLock: false };
 
 Module.preRun.push(function() {
 	FS.createFolder('/', 'save', true, true);
