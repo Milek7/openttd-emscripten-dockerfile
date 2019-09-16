@@ -63,7 +63,7 @@ WORKDIR /workdir/source
 
 CMD ./configure --without-zlib --without-lzo2 --without-sse --without-lzma --without-threads --enable-dedicated &&\
 	make -j2 &&\
-	emconfigure sh -c 'PKG_CONFIG_PATH=/extralibs/lib/pkgconfig ./configure --without-lzo2 --without-sse --without-threads --with-libtimidity' &&\
+	emconfigure sh -c 'PKG_CONFIG_PATH=/extralibs/lib/pkgconfig ./configure --without-lzo2 --without-sse --without-threads --with-libtimidity --with-sdl=sdl2' &&\
 	emmake make -j2 &&\
 	mkdir -p /workdir/output /workdir/content &&\
 	cp bin/openttd /workdir/openttd.bc &&\
